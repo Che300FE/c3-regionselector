@@ -1,0 +1,84 @@
+@import '../base/base';
+
+.index-list__wrapper{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  overflow-y: auto;
+
+  .side-bar__wrapper{
+    position: fixed;
+    width: .64rem;
+    top: 1.33rem;
+    right: .11rem;
+    padding: .21rem 0;
+    background-color: rgba(245,245,245, .6);
+    z-index: 999;
+    
+    .side-bar__tar{
+      display: block;
+      margin: .16rem 0;
+      font-size: .37rem;
+      color: $fontColor;
+      text-align: center;
+      line-height: 1;
+    }
+  }
+
+  .index-list__content{
+    width: 100%;
+
+    .list__content{
+      .list__title{
+        padding: .53rem 0 .27rem;
+        height: .37rem;
+        line-height: .37rem;
+        background-color: $bgColor;
+        font-size: .37rem;
+        color: #666666;
+        text-indent: .4rem;
+      }
+
+      .list__sub-item{
+        box-sizing: border-box;
+        line-height: 1.28rem;
+        font-size: .43rem;
+        color: $fontColor;
+        background-color: $white;
+        border-bottom: 1px solid $borderColor;
+
+        &:last-child{
+          border: none;
+        }
+
+        .list__sub-item-name{
+          margin-left: .4rem;
+        }
+
+        .city__list{
+          box-sizing: border-box;
+          display: flex;
+          flex-wrap: wrap;
+          padding: .4rem 0 0 .4rem;
+          background-color: #ebebeb;
+
+          .city__item{
+            box-sizing: border-box;
+            width: 1.85rem;
+            height: .8rem;
+            margin: 0 .36rem .4rem 0;
+            border: 1px solid #f0f0f0;
+            background-color: $white;
+            border-radius: 4px;
+            text-align: center;
+            line-height: .8rem;
+            font-size: .32rem;
+            color: #666666;
+          }
+        }
+      }
+    }
+  }
+}
