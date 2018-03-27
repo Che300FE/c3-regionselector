@@ -1,6 +1,11 @@
 @import './base/base';
 
 .area-selector{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
   background-color: $bgColor;
 
   .title-bar{

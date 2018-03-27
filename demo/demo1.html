@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+  <link rel="stylesheet" href="../src/css/reset.css">
+  <script src="https://f.alicdn.com/flexible/0.3.2/flexible.js"></script>
+  <script src="https://fezz.che300.com/libs/fastclick/fastclick.js"></script>
+  <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="../dist/areaSelect.js"></script>
+  <title>areaSelectDemo</title>
+</head>
+<body>
+  <div id="app">
+    <button @click="showAreaSelector">选择地区</button>
+    </br>
+    <p>选择结果:</p>
+    </br>
+    <p>{{selectedCity}}</p>
+    </br>
+    <che-area-selector
+      :visiable="showSelector"
+      :select-finsh="selectFinsh"
+      :go-back="goBack"
+      :deep="deep"
+      :show-title-bar="showTitleBar"
+      :show-cur-city="showCurCity"
+      :show-hot-city="showHotCity"
+      :show-country="showCountry"
+      :hot-cities="hotCities"
+      :show-tar-bar="showTarBar"></che-area-selector>
+  </div>
+</body>
+
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: function () {
+      return {
+        selectedCity: {},
+        showSelector: false,
+        // 是否显示自定义的h5 bar条
+        showTitleBar: true,
+        // 选择深度是城市还是省份
+        // province | city
+        deep: 'city',
+        // 城市单选维度下，是否显示当前城市
+        showCurCity: true,
+        // 城市选择维度下，是否显示热门城市
+        showHotCity: true,
+        // 城市或者省份单选情况下，是否显示选择全国
+        showCountry: true,
+        // 是否显示右侧快速定位导航栏
+        showTarBar: true,
+        // 自定义城市数据格式
+        hotCities: [
+          {
+            "city_id": "1",
+            "city_name": "北京",
+            "prov_id": "1"
+          },
+          {
+            "city_id": "3",
+            "city_name": "上海",
+            "prov_id": "3"
+          }          
+        ]
+      }
+    },
+    methods: {
+      showAreaSelector: function () {
+        this.showSelector = true;
+      },
+      selectFinsh: function(city) {
+        this.showSelector = false;
+        this.selectedCity = city
+      },
+      goBack: function () {
+        this.showSelector = false;
+      }
+    }
+  })
+</script>
+</html>

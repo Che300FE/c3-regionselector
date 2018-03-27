@@ -29,14 +29,14 @@
           class="header__content" 
           v-if="deep === 'city' && type === 'single' && showCurCity === true">
           <div class="cur-city">
-            <img class="cur-city__location-img" src="../assets/images/components/areaSelector/city_location@3x.png">
+            <img class="cur-city__location-img" src="https://assets.che300.com/feimg/areaSelect/city_location@3x.png">
             <span class="cur-city__name">{{curCity}}</span>
           </div>
           <div class="reload" @click.stop="reloadlLocation">
             <img 
               class="reload__relocation-img" 
               :class="{'spin': isReloadCurCity}"
-              src="../assets/images/components/areaSelector/city_relocation@3x.png">
+              src="https://assets.che300.com/feimg/areaSelect/city_relocation@3x.png">
             <span class="reload__tip">重新定位</span>
           </div>
         </div>
@@ -81,7 +81,7 @@ export default {
     // 是否显示当前的组件
     visiable: {
       type: Boolean,
-      default: false
+      default: true
     },
     // 是否显示自定义的h5 bar条
     showTitleBar: {
