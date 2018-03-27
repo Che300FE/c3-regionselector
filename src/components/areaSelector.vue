@@ -163,9 +163,18 @@ export default {
     }
   },
   mounted () {
+    this.getLocation();
     this.createAreaData(this.areaJson, this.baseTars);
   },
   methods: {
+    getLocation () {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(this.showPosition);
+      }
+    },
+    showPosition (position) {
+      alert(position.coords.latitude, position.coords.longitude);
+    },
     createAreaData (areaJson, baseTars) {
       // 全国所有省和市的数据
       let provis = areaJson.provinces || [];
@@ -184,8 +193,6 @@ export default {
       if (this.showTarBar) {
         this.sideBarList = this.createSideBarList(this.oAreaData);
       }
-
-      console.log(this.oAreaData);
     },
     // 生成以标签为key的 名字首字母为该key的数组对象
     createTarProvis (baseTars, provis) {
@@ -281,6 +288,8 @@ export default {
         console.log('单选了省份 >>>', oProvince);
         this.selectFinsh(oProvince);
       }
+
+      // TODO 点击全国的时候应该如何交互？？？
     },
     // 点击选择一个城市
     selectCity (city) {
