@@ -1,48 +1,76 @@
 <template>
-  <div class="area-selector">
+  <div class="area-selector" v-if="visiable">
+    <!-- 顶部的bar条开始 -->
+    <div class="title-bar" v-if="showTitleBar">
+      <div class="go-back__arrow" @click="goBack">
+        <img class="back-img" src="https://ssl-assets.che300.com/feimg/bapp/substitution/left-arrow.png">
+      </div>
+      <h2 class="title-name">选择地区</h2>
+    </div>
+    <!-- 顶部bar条结束 -->
     <index-list 
       :area-data="oAreaData"
       :show-tar-bar="showTarBar"
       :side-bar-list="sideBarList"
       :item-click="showCities"
-      :sub-item-click="selectCity">
+      :sub-item-click="selectCity"
+      :wrap-style="wrapStyle">
+      <!-- 自定义的头部插槽开始 -->
       <div slot="header">
-        <div class="header__title list__item" data-index="定">
+        <div 
+          class="header__title list__item" 
+          data-index="定"
+          v-if="deep === 'city' && type === 'single' && showCurCity === true">
           <p class="header__name">
             当前城市
           </p>
         </div>
-        <div class="header__content">
+        <div 
+          class="header__content" 
+          v-if="deep === 'city' && type === 'single' && showCurCity === true">
           <div class="cur-city">
             <img class="cur-city__location-img" src="../assets/images/components/areaSelector/city_location@3x.png">
-            <span class="cur-city__name">南京</span>
+            <span class="cur-city__name">{{curCity}}</span>
           </div>
-          <div class="reload">
-            <img class="reload__relocation-img" src="../assets/images/components/areaSelector/city_relocation@3x.png">
+          <div class="reload" @click.stop="reloadlLocation">
+            <img 
+              class="reload__relocation-img" 
+              :class="{'spin': isReloadCurCity}"
+              src="../assets/images/components/areaSelector/city_relocation@3x.png">
             <span class="reload__tip">重新定位</span>
           </div>
         </div>
-        <div class="header__title list__item" data-index="热">
+        <div 
+          class="header__title list__item" 
+          data-index="热"
+          v-if="deep === 'city' && showHotCity === true">
           <p class="header__name">
             热门城市
           </p>
         </div>
-        <div class="hot-city__wrapper">
+        <div 
+          class="hot-city__wrapper"
+          v-if="deep === 'city' && showHotCity === true">
           <div class="hot-city__item"
             v-for="item in hotCities"
             @click.stop="selectCity(item)"
             :key="item.id">{{item.city_name}}</div>
         </div>
       </div>
+      <!-- 自定义的头部插槽结束 -->
     </index-list>
   </div>
 </template>
 
 <script>
-
+import Vue from 'vue';
+import axios from 'axios';
 import areaJson from '@/assets/json/constants.json';
 import indexList from '@/widget/indexList';
 import '@/sass/areaSelector.scss';
+import urls from '@/api/urlConfig';
+
+Vue.prototype.$http = axios;
 
 export default {
   name: 'cheAreaSelector',
@@ -50,6 +78,16 @@ export default {
     indexList
   },
   props: {
+    // 是否显示当前的组件
+    visiable: {
+      type: Boolean,
+      default: false
+    },
+    // 是否显示自定义的h5 bar条
+    showTitleBar: {
+      type: Boolean,
+      default: true
+    },
     // 配置是单选还是多选
     // single | mutiple
     type: {
@@ -91,6 +129,12 @@ export default {
     showTarBar: {
       type: Boolean,
       default: true
+    },
+    wrapStyle: {
+      type: Object,
+      default: function(){
+        return {};
+      }
     },
     // 自定义的热门城市
     hotCities: {
@@ -144,6 +188,11 @@ export default {
     selectFinsh: {
       type: Function,
       default: function(){}
+    },
+    // 点击左上角返回时调用的函数
+    goBack: {
+      type: Function,
+      default: function(){}
     }
   },
   data () {
@@ -159,21 +208,72 @@ export default {
         id: '#',
         name: '全国',
         tarIndex: '#'
-      }
+      },
+      // 当前城市的名字
+      curCity: '',
+      // 是否正在重新定位当前的城市
+      isReloadCurCity: false, 
     }
   },
+  created () {
+    this.setWrapperStyle();
+  },
   mounted () {
-    this.getLocation();
+    if (this.deep === 'city' && this.showCurCity) {
+      this.getLocation();
+    }
     this.createAreaData(this.areaJson, this.baseTars);
   },
   methods: {
+    // 设置 index-list 区域的外壳样式
+    setWrapperStyle () {
+      // 如果用户没有自定义 top 值
+      if (!this.wrapStyle.top) {
+        this.wrapStyle.top = this.showTitleBar ? '45px' : '0px';
+      }
+    },
     getLocation () {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(this.showPosition);
+        this.isReloadCurCity = true;
+        navigator.geolocation.getCurrentPosition(this.showPosition, this.positionError);
+      } else {
+        console.log('你的浏览器不支持地理定位');
       }
     },
     showPosition (position) {
-      alert(position.coords.latitude, position.coords.longitude);
+      console.log(position, position.coords.latitude, position.coords.longitude);
+      this.$http.post(urls.queryCityByGeo, {
+        latitude: position.coords.latitude,
+        longitude: position.coords.longitude
+      }).then(res => {
+        this.curCity = res.data.cityName;
+        this.isReloadCurCity = false;
+      })
+    },
+    positionError (error) {
+      console.log(error);
+      let msg = '';
+      switch (error.code) {
+        case error.PERMISSION_DENIED:
+          msg = '用户拒绝了获取地理位置的请求。'
+          break;
+        case error.POSITION_UNAVAILABLE:
+          msg = '位置信息是不可用的。'
+          break;
+        case error.TIMEOUT:
+          msg = '请求用户地理位置超时。'
+          break;
+        case error.UNKNOWN_ERROR:
+          msg = '未知错误。'
+          break;      
+      }
+      this.isReloadCurCity = false;
+      alert(msg);
+    },
+    // 重新定位当前城市
+    reloadlLocation () {
+      console.log('重新定位当前城市');
+      this.getLocation();
     },
     createAreaData (areaJson, baseTars) {
       // 全国所有省和市的数据

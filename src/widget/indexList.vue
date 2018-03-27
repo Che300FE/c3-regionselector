@@ -64,6 +64,15 @@ export default {
     subItemClick: {
       type: Function,
       default: function () {}
+    },
+    wrapStyle: {
+      type: Object,
+      default: function(){
+        return {
+          top: '0px',
+          bottom: '0px'
+        };
+      }
     }
   },
   data () {
@@ -74,12 +83,19 @@ export default {
       wrapperHeight: 0,   // 滚动外壳的高度
       contentHeight: 0,   // 滚动主体的高度
       currentText: '',    // 当前选中的bar条标签
+      wrapperTop: 0,      // 滚动外壳距离屏幕顶部的高度
     }
   },
   mounted () {
+    this.initWrapperStyle();
     document.body.addEventListener('touchend', this.handleBodyTouchEnd, false);
   },
   methods: {
+    initWrapperStyle (){
+      this.oWrapper = document.querySelector('.index-list__wrapper');
+      this.oWrapper.style.top = this.wrapStyle.top;
+      this.wrapperTop = this.wrapStyle.top.split('px')[0];
+    },
     handleTouchstart (e) {
       // 如果不是在索引栏开始滑动, 直接return
       if (e.target.className !== 'side-bar__tar') {
@@ -88,7 +104,6 @@ export default {
 
       let oContent = document.querySelector('.index-list__content');
       this.contentHeight = oContent.offsetHeight;
-      this.oWrapper = document.querySelector('.index-list__wrapper');
       this.wrapperHeight = this.oWrapper.offsetHeight;
 
       // 触摸点对象
@@ -114,7 +129,7 @@ export default {
       // 保证当前触摸的标签为新的标签再进行计算 防止页面重复计算发生抖动
       if (targets.length && currentItem.innerText !== this.currentText) {
         let targetDom = targets[0];
-        let moveTop = targetDom.getBoundingClientRect().top;
+        let moveTop = targetDom.getBoundingClientRect().top - this.wrapperTop;
         // 记录新的标签值
         this.currentText = currentItem.innerText;
 
