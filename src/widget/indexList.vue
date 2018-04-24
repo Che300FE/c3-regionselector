@@ -1,44 +1,46 @@
 <template>
-  <div class="index-list__wrapper">
-    <div class="side-bar__wrapper" 
+  <div>
+    <div class="side-bar__wrapper"
       v-if="showTarBar"
-      @touchstart="handleTouchstart" 
+      @touchstart="handleTouchstart"
       @touchmove="handleTouchmove">
       <span class="side-bar__tar"
         v-for="(tar, index) in sideBarList"
         :key="index">{{tar}}</span>
     </div>
-    <div class="index-list__content">
-      <slot name="header"></slot>
-      <ul class="list__content">
-        <li class="list__item"
-          v-for="(value, key) in areaData"
-          :key="key" 
-          :data-index="key">
-          <p class="list__title">{{key}}</p>
-          <ul class="list__sub-list">
-            <li class="list__sub-item"
-              v-for="item in value"
-              @click.stop="itemClick(item, key, areaData)"
-              :key="item.id">
-              <div class="list__sub-item-name">{{item.name}}</div>
-              <ul class="city__list" 
-                v-show="item.toggle && item.tarIndex !== '#'">
-                <li class="city__item" 
-                  v-for="city in item.cities"
-                  @click.stop="subItemClick(city)"
-                  :key="city.id">{{city.name}}</li>
-              </ul>
-            </li>
-          </ul>
-        </li>
-      </ul>
+    <div class="index-list__wrapper">
+      <div class="index-list__content">
+        <slot name="header"></slot>
+        <ul class="list__content">
+          <li class="list__item"
+            v-for="(value, key) in areaData"
+            :key="key"
+            :data-index="key">
+            <p class="list__title">{{key}}</p>
+            <ul class="list__sub-list">
+              <li class="list__sub-item"
+                v-for="item in value"
+                @click.stop="itemClick(item, key, areaData)"
+                :key="item.id">
+                <div class="list__sub-item-name">{{item.name}}</div>
+                <ul class="city__list"
+                  v-show="item.toggle && item.tarIndex !== '#'">
+                  <li class="city__item"
+                    v-for="city in item.cities"
+                    @click.stop="subItemClick(city, item)"
+                    :key="city.id">{{city.name}}</li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-import '@/sass/widget/indexList.scss';
+import '@/sass/widget/indexList_50px.scss';
 export default {
   props: {
     areaData: {
@@ -115,7 +117,7 @@ export default {
     scrollMove (y) {
       let currentItem = document.elementFromPoint(this.navOffsetX, y);
       let listItems = document.querySelectorAll('.list__item');
-      
+
       if (!currentItem || !currentItem.classList.contains('side-bar__tar')) {
         return;
       }
@@ -139,6 +141,12 @@ export default {
         } else {
           this.oWrapper.scrollTop = this.lastDomTop = moveTop + this.lastDomTop;
         }
+
+        // 解决在iOS webview中设置scrollTop值之后页面部分不渲染的问题
+        setTimeout(() => {
+          this.oWrapper.scrollTop = this.lastDomTop + 1;
+          this.oWrapper.scrollTop = this.lastDomTop - 1;
+        }, 0)
       }
     },
     handleTouchmove (e) {

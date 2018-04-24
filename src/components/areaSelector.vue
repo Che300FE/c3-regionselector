@@ -8,7 +8,7 @@
       <h2 class="title-name">选择地区</h2>
     </div>
     <!-- 顶部bar条结束 -->
-    <index-list 
+    <index-list
       :area-data="oAreaData"
       :show-tar-bar="showTarBar"
       :side-bar-list="sideBarList"
@@ -17,44 +17,44 @@
       :wrap-style="wrapStyle">
       <!-- 自定义的头部插槽开始 -->
       <div slot="header">
-        <div 
-          class="header__title list__item" 
+        <div
+          class="header__title list__item"
           data-index="定"
           v-if="deep === 'city' && type === 'single' && showCurCity === true">
           <p class="header__name">
             当前城市
           </p>
         </div>
-        <div 
-          class="header__content" 
+        <div
+          class="header__content"
           v-if="deep === 'city' && type === 'single' && showCurCity === true">
           <div class="cur-city">
             <img class="cur-city__location-img" src="https://assets.che300.com/feimg/areaSelect/city_location@3x.png">
             <span class="cur-city__name">{{curCity}}</span>
           </div>
           <div class="reload" @click.stop="reloadlLocation">
-            <img 
-              class="reload__relocation-img" 
+            <img
+              class="reload__relocation-img"
               :class="{'spin': isReloadCurCity}"
               src="https://assets.che300.com/feimg/areaSelect/city_relocation@3x.png">
             <span class="reload__tip">重新定位</span>
           </div>
         </div>
-        <div 
-          class="header__title list__item" 
+        <div
+          class="header__title list__item"
           data-index="热"
           v-if="deep === 'city' && showHotCity === true">
           <p class="header__name">
             热门城市
           </p>
         </div>
-        <div 
+        <div
           class="hot-city__wrapper"
           v-if="deep === 'city' && showHotCity === true">
           <div class="hot-city__item"
             v-for="item in hotCities"
             @click.stop="selectCity(item)"
-            :key="item.id">{{item.city_name}}</div>
+            :key="item.id">{{item.name}}</div>
         </div>
       </div>
       <!-- 自定义的头部插槽结束 -->
@@ -67,7 +67,7 @@ import Vue from 'vue';
 import axios from 'axios';
 import areaJson from '@/assets/json/constants.json';
 import indexList from '@/widget/indexList';
-import '@/sass/areaSelector.scss';
+import '@/sass/areaSelector_50px.scss';
 import urls from '@/api/urlConfig';
 
 Vue.prototype.$http = axios;
@@ -108,7 +108,7 @@ export default {
     // 城市单选维度下，是否显示当前城市
     showCurCity: {
       type: Boolean,
-      default: true
+      default: false
     },
     // 城市选择维度下，是否显示热门城市
     showHotCity: {
@@ -123,7 +123,7 @@ export default {
     // 城市多选情况下，是否显示选择全省
     showProvince: {
       type: Boolean,
-      default: true      
+      default: true
     },
     // 是否显示右侧快速定位导航栏
     showTarBar: {
@@ -142,46 +142,38 @@ export default {
       default: function () {
         return [
           {
-            "city_id": "1",
-            "city_name": "北京",
-            "prov_id": "1"
+            "id": "1",
+            "name": "北京"
           },
           {
-            "city_id": "3",
-            "city_name": "上海",
-            "prov_id": "3"
+            "id": "3",
+            "name": "上海"
           },
           {
-            "city_id": "4",
-            "city_name": "重庆",
-            "prov_id": "4"
+            "id": "4",
+            "name": "重庆"
           },
           {
-            "city_id": "2",
-            "city_name": "天津",
-            "prov_id": "2"
+            "id": "2",
+            "name": "天津"
           },
           {
-            "city_id": "11",
-            "city_name": "南京",
-            "prov_id": "11"
+            "id": "11",
+            "name": "南京"
           },
           {
-            "city_id": "50",
-            "city_name": "深圳",
-            "prov_id": "20"
+            "id": "50",
+            "name": "深圳"
           },
           {
-            "city_id": "20",
-            "city_name": "广州",
-            "prov_id": "20"
+            "id": "20",
+            "name": "广州"
           },
           {
-            "city_id": "12",
-            "city_name": "杭州",
-            "prov_id": "12"
-          }                                
-        ]        
+            "id": "12",
+            "name": "杭州"
+          }
+        ]
       }
     },
     // 完成选择时调用的函数
@@ -193,6 +185,11 @@ export default {
     goBack: {
       type: Function,
       default: function(){}
+    }
+  },
+  watch: {
+    visiable (val) {
+      val === true && this.closeAllCities();
     }
   },
   data () {
@@ -212,7 +209,7 @@ export default {
       // 当前城市的名字
       curCity: '',
       // 是否正在重新定位当前的城市
-      isReloadCurCity: false, 
+      isReloadCurCity: false,
     }
   },
   created () {
@@ -265,7 +262,7 @@ export default {
           break;
         case error.UNKNOWN_ERROR:
           msg = '未知错误。'
-          break;      
+          break;
       }
       this.isReloadCurCity = false;
       alert(msg);
@@ -359,7 +356,7 @@ export default {
       let sideBarList = [];
 
       // 城市单选维度下 显示当前城市
-      if (this.deep === 'city' && 
+      if (this.deep === 'city' &&
           this.type === 'single' &&
           this.showCurCity === true) {
         sideBarList.push('定');
@@ -376,11 +373,32 @@ export default {
 
       return sideBarList;
     },
+
+    // 闭合所有省下面的市
+    closeAllCities () {
+      let allAreaData = this.oAreaData;
+      for (var tar in allAreaData) {
+        allAreaData[tar].forEach(prov => {
+          if (prov.cities && prov.toggle === true) {
+            prov.toggle = false;
+          }
+        })
+      }
+    },
+
     // 只要不是单选省份 点击身份栏都是显示下面对应的城市
     showCities (oProvince, key, areaData) {
+      // 闭合所有省下面的城市
+      this.closeAllCities();
+
       // 城市选择维度下 点击省显示下面对应的城市
       if (this.deep === 'city') {
-        oProvince.toggle = !oProvince.toggle;
+        // 点击的是全国
+        if (key === "#") {
+          this.selectFinsh(oProvince);
+        } else {
+          oProvince.toggle = true;
+        }
       }
 
       // 单选省份
@@ -389,14 +407,13 @@ export default {
         this.selectFinsh(oProvince);
       }
 
-      // TODO 点击全国的时候应该如何交互？？？
     },
     // 点击选择一个城市
-    selectCity (city) {
+    selectCity (city, prov) {
       // 单选城市
       if (this.type === 'single') {
-        console.log("单选了城市 >>>", city);
-        this.selectFinsh(city);
+        this.selectFinsh(city, prov);
+        console.log(city, prov)
       }
     }
   }

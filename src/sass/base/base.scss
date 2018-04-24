@@ -2,3 +2,24 @@ $fontColor: #333333;
 $bgColor: #f5f5f5;
 $white: #ffffff;
 $borderColor: #f0f0f0;
+
+$switchedFontSize: 37.5;
+$baseFontSize: 50;
+
+
+@mixin switchRem ($attr, $remVal) {
+
+  $switchPer: $switchedFontSize / $baseFontSize * 1rem;
+  $remValLength: length($remVal);
+
+  // 当转换值只有一个值的时候
+  @if ($remValLength == 1) {
+    #{$attr}: $switchPer * $remVal;
+  } @else if($attr == margin or $attr == padding) {
+      @for $i from 1 through ($remValLength) {
+        $curRemVal: nth($remVal, $i);
+        $remVal: set_nth($remVal, $i, $curRemVal * $switchPer);
+      }
+      #{$attr}: $remVal;
+  }
+}

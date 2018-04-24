@@ -3,10 +3,14 @@ var webpack = require('webpack')
 
 module.exports = {
   entry: './src/components/index.js',
+  // entry: './src/main.js',
   output: {
     path: path.resolve(__dirname, './dist'),
     publicPath: '/dist/',
-    filename: 'areaSelect.js'
+    filename: 'index.js',
+    library: 'C3RegionSelector',
+    libraryTarget: 'umd',
+    umdNamedDefine: true
   },
   module: {
     rules: [

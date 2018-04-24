@@ -4,17 +4,17 @@
 
 .side-bar__wrapper{
   position: fixed;
-  width: .64rem;
-  top: 1.33rem;
-  right: 0rem;
-  padding: .21rem .11rem;
+  @include switchRem(width, .64);
+  @include switchRem(top, 1.33);
+  right: 0;
+  @include switchRem(padding, .21 .11);
   background-color: rgba(245,245,245, .6);
   z-index: 999;
 
   .side-bar__tar{
     display: block;
-    margin: .16rem 0;
-    font-size: .37rem;
+    @include switchRem(margin, .16 0);
+    @include switchRem(font-size, .37);
     color: $fontColor;
     text-align: center;
     line-height: 1;
@@ -33,19 +33,17 @@
 
     .list__content{
       .list__title{
-        padding: .53rem 0 .27rem;
-        // height: .37rem;
-        // line-height: .37rem;
+        @include switchRem(padding, .53 0 .27);
         background-color: $bgColor;
-        font-size: .37rem;
+        @include switchRem(font-size, .37);
         color: #666666;
-        text-indent: .4rem;
+        @include switchRem(text-indent, .4);
       }
 
       .list__sub-item{
         box-sizing: border-box;
-        line-height: 1.28rem;
-        font-size: .43rem;
+        @include switchRem(line-height, 1.28);
+        @include switchRem(font-size, .43);
         color: $fontColor;
         background-color: $white;
         border-bottom: 1px solid $borderColor;
@@ -55,27 +53,27 @@
         }
 
         .list__sub-item-name{
-          margin-left: .4rem;
+          @include switchRem(margin-left, .4);
         }
 
         .city__list{
           box-sizing: border-box;
           display: flex;
           flex-wrap: wrap;
-          padding: .4rem 0 0 .4rem;
+          @include switchRem(padding, .4 0 0 .4);
           background-color: #ebebeb;
 
           .city__item{
             box-sizing: border-box;
-            width: 1.85rem;
-            height: .8rem;
-            margin: 0 .36rem .4rem 0;
+            @include switchRem(width, 1.85);
+            @include switchRem(height, .8);
+            @include switchRem(margin, 0 .36 .4 0);
             border: 1px solid #f0f0f0;
             background-color: $white;
             border-radius: 4px;
             text-align: center;
-            line-height: .8rem;
-            font-size: .32rem;
+            @include switchRem(line-height, .8);
+            @include switchRem(font-size, .32);
             color: #666666;
           }
         }

@@ -14,7 +14,7 @@
     height: 45px;
     line-height: 45px;
     text-align: center;
-    font-size: .51rem;
+    @include switchRem(font-size, .51);
     background-color: $white;
 
     .go-back__arrow{
@@ -25,8 +25,8 @@
       width: 50px;
 
       .back-img{
-        width: .24rem;
-        height: .48rem;
+        @include switchRem(width, .24);
+        @include switchRem(height, .48);
       }
     }
 
@@ -38,13 +38,11 @@
 
   .header__title{
     .header__name{
-      padding: .53rem 0 .27rem;
-      // height: .37rem;
-      // line-height: .37rem;
+      @include switchRem(padding, .53 0 .27);
       background-color: $bgColor;
-      font-size: .37rem;
+      @include switchRem(font-size, .37);
       color: #666666;
-      text-indent: .4rem;
+      @include switchRem(text-indent, .4);
     }
   }
 
@@ -52,22 +50,22 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    height: 1.28rem;
+    @include switchRem(height, 1.28);
     background-color: $white;
 
     .cur-city{
       display: flex;
       align-items: center;
-      margin-left: .4rem;
+      @include switchRem(margin-left, .4);
 
       .cur-city__location-img{
-        width: .48rem;
-        height: .48rem;
-        margin-right: .16rem;
+        @include switchRem(width, .48);
+        @include switchRem(height, .48);
+        @include switchRem(margin-right, .16);
       }
 
       .cur-city__name{
-        font-size: .43rem;
+        @include switchRem(font-size, .43);
         color: $fontColor;
       }
     }
@@ -75,12 +73,12 @@
     .reload{
       display: flex;
       align-items: center;
-      margin-right: .93rem;
+      @include switchRem(margin-right, .93);
 
       .reload__relocation-img{
-        width: .48rem;
-        height: .48rem;
-        margin-right: .16rem;
+        @include switchRem(width, .48);
+        @include switchRem(height, .48);
+        @include switchRem(margin-right, .16);
 
         &.spin{
           animation: spin 800ms infinite linear;
@@ -93,7 +91,7 @@
       }
 
       .reload__tip{
-        font-size: .37rem;
+        @include switchRem(font-size, .37);
         color: #666666;
       }
     }
@@ -103,19 +101,19 @@
     display: flex;
     flex-wrap: wrap;
     box-sizing: border-box;
-    padding: .4rem 0 0 .4rem;
+    @include switchRem(padding, .4 0 0 .4);
     background-color: $white;
 
     .hot-city__item{
-      width: 1.85rem;
-      height: .8rem;
-      margin: 0 .36rem .4rem 0;
+      @include switchRem(width, 1.85);
+      @include switchRem(height, .8);
+      @include switchRem(margin, 0 .36 .4 0);
       border: 1px solid #f0f0f0;
       background-color: rgba(255, 255, 255, 0.05);
       border-radius: 4px;
       text-align: center;
-      line-height: .8rem;
-      font-size: .32rem;
+      @include switchRem(line-height, .8);
+      @include switchRem(font-size, .32);
       color: #666666;
     }
   }
