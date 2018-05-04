@@ -279,19 +279,16 @@ export default {
       console.log('重新定位当前城市');
       this.getLocation();
     },
-    createAreaData (areaJson, baseTars) {
-      // 全国所有省和市的数据
-      let provis = areaJson.provinces || [];
-      let cities = areaJson.city || [];
-      // 以标签为key的省数组
-      let oTarProvis = {};
-      // 以省id为key的市数组
-      let oIdsProvis = {};
-
+    
+    /**
+     * 根据默认城市ID初始化选择器
+     */
+    filterByDefaultCitys(areaJson){
       // 过滤默认数据
-      if(this.defaultCities.length>0){
-        cities = [];
+      let cities = [],
         provis = [];
+        
+      if(this.defaultCities.length>0){
         cities = this.defaultCities.map(function(cityId){
             let city = null;
             for(let index in areaJson.city){
@@ -311,8 +308,28 @@ export default {
                 }
             }
         })
+        return {
+            cities,
+            provis
+        }
       }
-      
+      return false;
+    },
+
+    createAreaData (areaJson, baseTars) {
+      // 全国所有省和市的数据
+      let provis = areaJson.provinces || [];
+      let cities = areaJson.city || [];
+      // 以标签为key的省数组
+      let oTarProvis = {};
+      // 以省id为key的市数组
+      let oIdsProvis = {};
+      let filterCitys = this.filterByDefaultCitys(areaJson);
+      if(filterCitys){
+          provis = filterCitys.provis;
+          cities = filterCitys.cities;
+      }
+
       oTarProvis = this.createTarProvis(this.baseTars, provis);
       oIdsProvis = this.createIdsProvis(cities);
 
