@@ -62,8 +62,7 @@
   </div>
 </template>
 
-<script>
-import Vue from 'vue';
+<script> 
 import axios from 'axios';
 import areaJson from '@/assets/json/constants.json';
 import indexList from '@/widget/indexList';
