@@ -69,8 +69,6 @@ import indexList from '@/widget/indexList';
 import '@/sass/areaSelector_50px.scss';
 import urls from '@/api/urlConfig';
 
-Vue.prototype.$http = axios;
-
 export default {
   name: 'cheAreaSelector',
   components: {
@@ -215,6 +213,8 @@ export default {
     this.setWrapperStyle();
   },
   mounted () {
+    this.$http = axios;
+
     if (this.deep === 'city' && this.showCurCity) {
       this.getLocation();
     }
@@ -264,7 +264,7 @@ export default {
           break;
       }
       this.isReloadCurCity = false;
-      alert(msg);
+      console.log(msg);
     },
     // 重新定位当前城市
     reloadlLocation () {
