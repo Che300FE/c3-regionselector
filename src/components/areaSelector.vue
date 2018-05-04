@@ -136,6 +136,14 @@ export default {
       }
     },
     // 自定义的热门城市
+    defaultCities: {
+      type: Array,
+      default: function () {
+        return [ 
+        ]
+      }
+    },
+    // 自定义的热门城市
     hotCities: {
       type: Array,
       default: function () {
@@ -280,6 +288,31 @@ export default {
       // 以省id为key的市数组
       let oIdsProvis = {};
 
+      // 过滤默认数据
+      if(this.defaultCities.length>0){
+        cities = [];
+        provis = [];
+        cities = this.defaultCities.map(function(cityId){
+            let city = null;
+            for(let index in areaJson.city){
+                let item = areaJson.city[index];
+                if(item.city_id == cityId){
+                    city = item;
+                    break;
+                }
+            }
+            return city;
+        })
+        areaJson.provinces.forEach(function(item){
+             for(let index in cities){ 
+                if(cities[index].prov_id == item.prov_id){
+                    provis.push(item)
+                    break;
+                }
+            }
+        })
+      }
+      
       oTarProvis = this.createTarProvis(this.baseTars, provis);
       oIdsProvis = this.createIdsProvis(cities);
 

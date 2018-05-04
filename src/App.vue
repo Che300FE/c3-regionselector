@@ -1,11 +1,15 @@
 <template>
   <div id="app">
-    <area-selector></area-selector>
+    <area-selector
+      v-if="defaultCities.length"
+      :default-cities="defaultCities"
+    ></area-selector>
   </div>
 </template>
 
 <script>
-import areaSelector from '@/components/areaSelector';
+import areaSelector from './components/areaSelector';
+import axios from 'axios';
 
 export default {
   name: 'app',
@@ -14,6 +18,7 @@ export default {
   },
   data () {
     return {
+        defaultCities:[],
     }
   }
 }
