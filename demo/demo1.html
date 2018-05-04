@@ -9,6 +9,7 @@
   <script src="https://f.alicdn.com/flexible/0.3.2/flexible.js"></script>
   <script src="https://fezz.che300.com/libs/fastclick/fastclick.js"></script>
   <script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <script src="https://cdn.bootcss.com/axios/0.18.0/axios.js"></script>
   <script src="../dist/index.js"></script>
   <title>areaSelectDemo</title>
 </head>
@@ -24,12 +25,14 @@
       :visiable="showSelector"
       :select-finsh="selectFinsh"
       :go-back="goBack"
+      v-if="defaultCities.length"
       :deep="deep"
       :show-title-bar="showTitleBar"
       :show-cur-city="showCurCity"
       :show-hot-city="showHotCity"
       :show-country="showCountry"
       :hot-cities="hotCities"
+      :default-cities="defaultCities"
       :show-tar-bar="showTarBar"></che-area-selector>
   </div>
 </body>
@@ -47,13 +50,14 @@
         // province | city
         deep: 'city',
         // 城市单选维度下，是否显示当前城市
-        showCurCity: true,
+        showCurCity: false,
         // 城市选择维度下，是否显示热门城市
-        showHotCity: true,
+        showHotCity: false,
         // 城市或者省份单选情况下，是否显示选择全国
-        showCountry: true,
+        showCountry: false,
         // 是否显示右侧快速定位导航栏
         showTarBar: true,
+        defaultCities:[],
         // 自定义城市数据格式
         hotCities: [
           {
@@ -80,7 +84,19 @@
       goBack: function () {
         this.showSelector = false;
       }
-    }
+    },
+  created : function(){
+    let me = this;
+    axios.get('https://dingjia.che300.com/api/v276/util/city/list_consumption_loan_city')
+      .then(function(res){
+        if(res.data && res.data.data && res.data.data.length>0){
+          me.defaultCities = res.data.data.map(function(item){
+              return item.id;
+          });
+          console.log(me.defaultCities)
+        }
+      })
+  }
   })
 </script>
 </html>
