@@ -28,7 +28,7 @@
         <div
           class="header__content"
           v-if="deep === 'city' && type === 'single' && showCurCity === true">
-          <div class="cur-city">
+          <div class="cur-city" @click.stop="clickCurCity">
             <img class="cur-city__location-img" src="https://assets.che300.com/feimg/areaSelect/city_location@3x.png">
             <span class="cur-city__name">{{curCity}}</span>
           </div>
@@ -62,7 +62,7 @@
   </div>
 </template>
 
-<script> 
+<script>
 import axios from 'axios';
 import areaJson from '@/assets/json/constants.json';
 import indexList from '@/widget/indexList';
@@ -137,7 +137,7 @@ export default {
     defaultCities: {
       type: Array,
       default: function () {
-        return [ 
+        return [
         ]
       }
     },
@@ -190,6 +190,11 @@ export default {
     goBack: {
       type: Function,
       default: function(){}
+    },
+    // 点击选择当前定位的城市
+    selectCurCity: {
+      type: Function,
+      default: function(){},
     }
   },
   watch: {
@@ -279,7 +284,7 @@ export default {
       console.log('重新定位当前城市');
       this.getLocation();
     },
-    
+
     /**
      * 根据默认城市ID初始化选择器
      */
@@ -287,7 +292,7 @@ export default {
       // 过滤默认数据
       let cities = [],
         provis = [];
-        
+
       if(this.defaultCities.length>0){
         cities = this.defaultCities.map(function(cityId){
             let city = null;
@@ -301,7 +306,7 @@ export default {
             return city;
         })
         areaJson.provinces.forEach(function(item){
-             for(let index in cities){ 
+             for(let index in cities){
                 if(cities[index].prov_id == item.prov_id){
                     provis.push(item)
                     break;
@@ -463,6 +468,27 @@ export default {
       if (this.type === 'single') {
         this.selectFinsh(city, prov);
         console.log(city, prov)
+      }
+    },
+
+    // 点击当前的定位的城市 以选择定位所在的城市
+    clickCurCity () {
+      var _self = this;
+      var _curCityName = this.curCity;
+
+      // 判断是否已经通过定位获取到了当前城市的名字
+      if ( typeof _curCityName === 'string' && _curCityName.length ) {
+        var _allCities = _self.areaJson.city;
+
+        var curCity = _allCities.find(_iCity => {
+          return _iCity.city_name === _curCityName.trim();
+        });
+
+        // 触发外部传入的选择当前城市的方法
+        _self.selectCurCity(curCity);
+
+      } else {
+        throw new Error('未能通过定位获取到当前城市的名称');
       }
     }
   }
