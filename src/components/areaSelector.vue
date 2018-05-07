@@ -28,7 +28,7 @@
         <div
           class="header__content"
           v-if="deep === 'city' && type === 'single' && showCurCity === true">
-          <div class="cur-city" @click.stop="clickCurCity">
+          <div class="cur-city" @click="clickCurCity">
             <img class="cur-city__location-img" src="https://assets.che300.com/feimg/areaSelect/city_location@3x.png">
             <span class="cur-city__name">{{curCity}}</span>
           </div>
