@@ -484,6 +484,9 @@ export default {
           return _iCity.city_name === _curCityName.trim();
         });
 
+        curCity.name = curCity.city_name;
+        curCity.id = curCity.city_id;
+
         // 触发外部传入的选择当前城市的方法
         _self.selectCurCity(curCity);
 
