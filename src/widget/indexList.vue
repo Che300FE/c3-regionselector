@@ -40,7 +40,10 @@
 </template>
 
 <script>
+
+import BScroll from 'better-scroll';
 import '@/sass/widget/indexList_50px.scss';
+
 export default {
   props: {
     areaData: {
@@ -86,13 +89,25 @@ export default {
       contentHeight: 0,   // 滚动主体的高度
       currentText: '',    // 当前选中的bar条标签
       wrapperTop: 0,      // 滚动外壳距离屏幕顶部的高度
+      scroll: null,       // better-scroll 对象
     }
   },
   mounted () {
     this.initWrapperStyle();
     document.body.addEventListener('touchend', this.handleBodyTouchEnd, false);
+    this.initBscroll();
   },
   methods: {
+	  /**
+     * 初始化 better-scroll
+	   */
+  	initBscroll () {
+		  this.scroll = new BScroll('.index-list__wrapper', {
+		  	scrollY: true,
+        click: true,
+      });
+    },
+
     initWrapperStyle (){
       this.oWrapper = document.querySelector('.index-list__wrapper');
       this.oWrapper.style.top = this.wrapStyle.top;

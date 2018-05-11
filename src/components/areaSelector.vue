@@ -53,7 +53,7 @@
           v-if="deep === 'city' && showHotCity === true">
           <div class="hot-city__item"
             v-for="item in hotCities"
-            @click.stop="selectCity(item)"
+            @click="selectHotCity(item)"
             :key="item.id">{{item.name}}</div>
         </div>
       </div>
@@ -78,7 +78,7 @@ export default {
     // 是否显示当前的组件
     visiable: {
       type: Boolean,
-      default: true
+      default: false,
     },
     // 是否显示自定义的h5 bar条
     showTitleBar: {
@@ -382,7 +382,7 @@ export default {
           id: city.city_id,
           name: city.city_name
         });
-      })
+      });
 
       return idsProvis;
     },
@@ -462,12 +462,48 @@ export default {
       }
 
     },
+
+    /**
+     * 根据cityId 获取该市对应的 市的详细数据 和 包含该市的省的详细数据
+     */
+    getCityAndProvinceByCityId (cityId) {
+    	let allProvinces = areaJson.provinces || [];
+      let allCities = areaJson.city || [];
+
+      let cityData = allCities.find(city => {
+      	return city.city_id === cityId;
+      });
+
+      let provinceData = allProvinces.find(province => {
+      	return province.prov_id === cityData.prov_id;
+      });
+
+	    return {
+		    cityData,
+        provinceData
+      }
+    },
+
     // 点击选择一个城市
     selectCity (city, prov) {
       // 单选城市
       if (this.type === 'single') {
         this.selectFinsh(city, prov);
-        console.log(city, prov)
+      }
+    },
+
+	  /**
+     * 点击选择热门城市
+	   * @param hotCity {Object} 热门城市对象
+	   */
+	  selectHotCity (hotCity) {
+	  	let hotCityId = hotCity.id;
+
+      if (hotCityId != null) {
+        let cityAndProviceData = this.getCityAndProvinceByCityId(hotCityId);
+        this.selectFinsh(cityAndProviceData.cityData, cityAndProviceData.provinceData);
+      } else {
+      	throw new Error('热门城市的id为null');
       }
     },
 
