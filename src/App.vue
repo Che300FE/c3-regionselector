@@ -1,8 +1,8 @@
 <template>
   <div id="app">
     <area-selector
-      v-if="defaultCities.length"
-      :default-cities="defaultCities"
+      :visiable="true"
+      :select-finsh="selectFinsh"
     ></area-selector>
   </div>
 </template>
@@ -19,6 +19,11 @@ export default {
   data () {
     return {
         defaultCities:[],
+    }
+  },
+  methods: {
+	  selectFinsh (city, provice) {
+      console.log('城市数据 >>>', city, '省份数据 >>>', provice);
     }
   }
 }
