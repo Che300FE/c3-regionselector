@@ -42,7 +42,8 @@
 <script>
 
 import BScroll from 'better-scroll';
-import '@/sass/widget/indexList_50px.scss';
+import '@/sass/widget/indexList.scss';
+// import '@/sass/widget/indexList_50px.scss';
 
 export default {
   props: {

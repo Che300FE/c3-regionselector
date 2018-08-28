@@ -66,7 +66,8 @@
 import axios from 'axios';
 import areaJson from '@/assets/json/constants.json';
 import indexList from '@/widget/indexList';
-import '@/sass/areaSelector_50px.scss';
+import '@/sass/areaSelector.scss';
+// import '@/sass/areaSelector_50px.scss';
 import urls from '@/api/urlConfig';
 
 export default {
