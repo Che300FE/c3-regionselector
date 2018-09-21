@@ -292,7 +292,7 @@ export default {
       // 过滤默认数据
       let cities = [],
         provis = [];
-      let tempDefaultCities = Object.assign(true,[],this.defaultCities);
+      let tempDefaultCities = Object.assign([],this.defaultCities);
       if(tempDefaultCities.length>0){
         cities = tempDefaultCities.map(function(cityId){
             let city = null;
