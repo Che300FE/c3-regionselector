@@ -66,7 +66,8 @@
 import axios from 'axios';
 import areaJson from '@/assets/json/constants.json';
 import indexList from '@/widget/indexList';
-import '@/sass/areaSelector_50px.scss';
+import '@/sass/areaSelector.scss';
+// import '@/sass/areaSelector_50px.scss';
 import urls from '@/api/urlConfig';
 
 export default {
@@ -519,6 +520,9 @@ export default {
         var curCity = _allCities.find(_iCity => {
           return _iCity.city_name === _curCityName.trim();
         });
+
+        curCity.name = curCity.city_name;
+        curCity.id = curCity.city_id;
 
         // 触发外部传入的选择当前城市的方法
         _self.selectCurCity(curCity);
