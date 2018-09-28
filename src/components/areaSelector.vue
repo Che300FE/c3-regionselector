@@ -293,9 +293,9 @@ export default {
       // 过滤默认数据
       let cities = [],
         provis = [];
-
-      if(this.defaultCities.length>0){
-        cities = this.defaultCities.map(function(cityId){
+      let tempDefaultCities = Object.assign([],this.defaultCities);
+      if(tempDefaultCities.length>0){
+        cities = tempDefaultCities.map(function(cityId){
             let city = null;
             for(let index in areaJson.city){
                 let item = areaJson.city[index];
