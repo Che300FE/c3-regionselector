@@ -297,14 +297,12 @@ export default {
       if(tempDefaultCities.length>0){
         cities = tempDefaultCities.map(function(cityId){
             let city = null;
-            for(let index in areaJson.city){
-                let item = areaJson.city[index];
-                if(item.city_id == cityId){
-                    city = item;
-                    break;
-                }
-            }
-            return city;
+
+            city = areaJson.city.filter(function(item){
+              return item.city_id == cityId;
+            })
+
+            return city[0];
         })
         areaJson.provinces.forEach(function(item){
              for(let index in cities){
